@@ -4,3 +4,4 @@
   ansible.builtin.systemd:
     name: vector
     state: restarted
+  ignore_errors: true
