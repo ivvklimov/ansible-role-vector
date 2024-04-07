@@ -1,0 +1,28 @@
+---
+- name: Verify Vector role
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Include variables
+      include_vars:
+        file: ../../vars/main.yml
+
+    - name: Check vector process PID
+      shell: echo -n $(pgrep vector)
+      register: vector_pid
+
+    - name: Check vector service
+      assert:
+        that: vector_pid.stdout != ""
+        success_msg: "Service is running"
+        fail_msg: "Service not running FAIL"
+
+    - name: Vector config validate
+      ansible.builtin.command: "vector validate --no-environment {{ vector_config_dir }}/vector.yml"
+      register: valid_config
+
+    - name: Check vector config
+      assert:
+        that: valid_config.rc == 0
+        success_msg: "Vector config valid"
+        fail_msg: "Vector config not valid FAIL"
