@@ -2,6 +2,6 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include vctor"
+    - name: "Include ansible-role-vector"
       include_role:
-        name: "vector"
+        name: "ansible-role-vector"
