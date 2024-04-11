@@ -4,4 +4,4 @@
   tasks:
     - name: "Include ansible-role-vector"
       include_role:
-        name: "ansible-role-vector"
+        name: "."
