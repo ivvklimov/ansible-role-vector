@@ -2,17 +2,28 @@ pipeline {
     agent {
         label 'ansible'
     }
+    
+    environment {
+        PYENV_ROOT = "/usr/local/pyenv"
+        PATH = "${PYENV_ROOT}/bin:/usr/local/bin:${PATH}"
+    }
+
     stages {
-        stage('First') {
+        stage('Build') {
             steps {
-                // sh 'ansible-playbook --version'
-                sh 'uptime'
+                // Получить код из репозитория GitHub
+                git branch: 'jenkins', url: 'https://github.com/ivvklimov/ansible-role-vector.git'
             }
         }
-        stage('Second') {
+        
+        stage('Molecule test') {
             steps {
-                sh 'echo Hello'
-                sh 'echo "second step"'
+                script {
+                   sh '''
+                        eval "$(pyenv init --path)"
+                        molecule test -s default
+                    '''
+                }
             }
         }
     }
